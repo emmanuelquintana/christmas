@@ -183,8 +183,18 @@ body {
     border: 1px solid rgba(255, 255, 255, .12);
     border-radius: 999px;
     backdrop-filter: blur(10px);
+    --shimmer-hue: 60deg;
+    --shimmer-sat: 100%;
     z-index: 5;
     pointer-events: none;
+}
+
+.desktop-text {
+    display: inline;
+}
+
+.mobile-text {
+    display: none;
 }
 
 .treeArea {
@@ -708,6 +718,42 @@ body {
         bottom: auto;
         top: 12px;
         text-align: center;
+    }
+
+    /* ✅ Header ajustes en móvil */
+    .controls {
+        gap: 6px;
+    }
+
+    .pill {
+        padding: 6px 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        /* Evita que el texto se envuelva */
+    }
+
+    /* Mostrar texto corto en móvil */
+    .desktop-text {
+        display: none;
+    }
+
+    .mobile-text {
+        display: inline;
+    }
+
+    /* Ocultar subtítulo para ahorrar espacio */
+    .brand .subtitle {
+        display: none;
+    }
+
+    /* Ocultar botón Encender en móvil */
+    .btn-encender {
+        display: none;
+    }
+
+    .brand .title {
+        font-size: 15px;
+        /* Reducir título */
     }
 
     .wishUI {

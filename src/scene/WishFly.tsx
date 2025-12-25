@@ -54,7 +54,6 @@ export default function WishFly({
 
         // Control points (arco bonito)
         const dx = end.x - start.x;
-        const dy = end.y - start.y;
 
         const cp1: Point = {
             x: start.x + dx * 0.25 + (Math.random() * 40 - 20),

@@ -21,10 +21,11 @@ type Row = {
 const TABLE = "wishes";
 const MAX = 200;
 
-export async function fetchWishes(limit = MAX): Promise<Wish[]> {
+export async function fetchWishes(username: string, limit = MAX): Promise<Wish[]> {
     const { data, error } = await supabase
         .from(TABLE)
         .select("id,name,message,x,y,created_at")
+        .eq("username", username)
         .order("created_at", { ascending: true })
         .limit(limit);
 
@@ -42,15 +43,15 @@ export async function fetchWishes(limit = MAX): Promise<Wish[]> {
 
 /**
  * Insert con id definido por el cliente
- * (así evitamos duplicados con realtime: el id local = id en DB)
  */
-export async function insertWish(input: { id: string; name: string; message: string; x: number; y: number }) {
+export async function insertWish(input: { id: string; name: string; message: string; x: number; y: number; username: string }) {
     const { error } = await supabase.from(TABLE).insert({
         id: input.id,
         name: input.name ?? "",
         message: input.message,
         x: input.x,
         y: input.y,
+        username: input.username,
     });
 
     // Si ya existe (por reintentos), no rompemos
@@ -59,12 +60,12 @@ export async function insertWish(input: { id: string; name: string; message: str
     }
 }
 
-export function subscribeToNewWishes(onInsert: (wish: Wish) => void) {
+export function subscribeToNewWishes(username: string, onInsert: (wish: Wish) => void) {
     const channel = supabase
-        .channel("wishes-inserts")
+        .channel(`wishes-inserts-${username}`)
         .on(
             "postgres_changes",
-            { event: "INSERT", schema: "public", table: TABLE },
+            { event: "INSERT", schema: "public", table: TABLE, filter: `username=eq.${username}` },
             (payload) => {
                 const r = payload.new as Row;
                 onInsert({

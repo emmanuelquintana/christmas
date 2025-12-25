@@ -82,7 +82,7 @@ function normalizeWishesToPct(rows: Wish[], skyRect: DOMRect | null) {
     return { rows: next, changed };
 }
 
-export default function ChristmasScene() {
+export default function ChristmasScene({ username }: { username: string }) {
     const reduced = usePrefersReducedMotion();
 
     const sceneRef = useRef<HTMLDivElement | null>(null);
@@ -97,14 +97,14 @@ export default function ChristmasScene() {
     useEffect(() => {
         let alive = true;
 
-        fetchWishes(200)
+        fetchWishes(username, 200)
             .then((rows) => {
                 if (!alive) return;
                 setWishes(rows);
             })
             .catch(() => { });
 
-        const unsub = subscribeToNewWishes((w) => {
+        const unsub = subscribeToNewWishes(username, (w) => {
             setWishes((prev) => {
                 if (prev.some((p) => p.id === w.id)) return prev;
                 return [...prev, w].slice(-200);
@@ -115,7 +115,7 @@ export default function ChristmasScene() {
             alive = false;
             unsub();
         };
-    }, []);
+    }, [username]);
 
     // ✅ 1.1) Normalizar coords a % cuando ya exista skyRef (evita “faltan estrellas”)
     useLayoutEffect(() => {
@@ -258,6 +258,7 @@ export default function ChristmasScene() {
                     message: star.message,
                     x: star.x,
                     y: star.y,
+                    username,
                 }).catch(() => { });
             }
 
