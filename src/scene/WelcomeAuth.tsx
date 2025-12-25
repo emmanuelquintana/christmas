@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import SkyDecor from "./SkyDecor";
 import StarfieldCanvas from "./StarfieldCanvas";
 import SnowCanvas from "./SnowCanvas";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
@@ -62,6 +63,7 @@ export default function WelcomeAuth() {
             {/* Background Decor */}
             <div className="skyArea" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)" }}>
                 <StarfieldCanvas mode="night" reducedMotion={reduced} />
+                <SkyDecor reducedMotion={reduced} />
                 <SnowCanvas mode="night" reducedMotion={reduced} />
             </div>
 
