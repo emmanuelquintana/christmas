@@ -1,0 +1,745 @@
+:root {
+    --bg0: #02030c;
+    --bg1: #06122a;
+    --text: rgba(255, 255, 255, .94);
+    --muted: rgba(255, 255, 255, .66);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    overflow: hidden;
+    background: radial-gradient(1200px 700px at 30% 15%, var(--bg1), var(--bg0));
+}
+
+.app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hud {
+    padding: 16px 18px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.badge {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, .10);
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+}
+
+.titles .title {
+    font-size: 18px;
+    font-weight: 780;
+    letter-spacing: .2px;
+}
+
+.titles .subtitle {
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.pill {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, .18);
+    background: rgba(255, 255, 255, .08);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, .30);
+}
+
+.pill:hover {
+    background: rgba(255, 255, 255, .10);
+}
+
+.stage {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    /* ✅ evita scroll horizontal en responsive */
+    padding: 0 18px 18px;
+}
+
+.scene {
+    position: relative;
+    width: 100%;
+    height: min(720px, calc(100vh - 120px));
+    min-height: 520px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .12);
+    background: rgba(0, 0, 0, .12);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, .45);
+    --mx: 0;
+    --my: 0;
+}
+
+.sceneGrid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+}
+
+.skyArea {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(900px 500px at 30% 20%, rgba(60, 120, 255, .12), rgba(0, 0, 0, 0)),
+        radial-gradient(700px 420px at 65% 35%, rgba(140, 80, 255, .10), rgba(0, 0, 0, 0)),
+        linear-gradient(180deg, rgba(0, 0, 0, .10), rgba(0, 0, 0, .18));
+}
+
+/* ✅ CAPAS SEGURAS (NO cambian el look, solo el orden) */
+.starCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform: translate(calc(var(--mx) * 6px), calc(var(--my) * 4px));
+    z-index: 1;
+}
+
+.skyDecor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transform: translate(calc(var(--mx) * 10px), calc(var(--my) * 8px));
+    transition: transform 120ms ease-out;
+    z-index: 2;
+}
+
+.skyDecorSvg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.snowCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform: translate(calc(var(--mx) * 6px), calc(var(--my) * 4px));
+    z-index: 3;
+}
+
+.wishStarsLayer {
+    position: absolute;
+    inset: 0;
+    pointer-events: auto;
+    z-index: 4;
+    /* ⭐ arriba de nieve/decor */
+}
+
+.skyHint {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    padding: 9px 12px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, .78);
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.treeArea {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px 14px;
+    background:
+        radial-gradient(520px 520px at 40% 60%, rgba(255, 255, 255, .10), rgba(0, 0, 0, 0)),
+        linear-gradient(180deg, rgba(0, 0, 0, .06), rgba(0, 0, 0, .22));
+    border-left: 1px solid rgba(255, 255, 255, .08);
+}
+
+.treeRoot {
+    width: min(420px, 92%);
+    transform: translate(calc(var(--mx) * -6px), calc(var(--my) * -4px));
+    transition: transform 140ms ease-out;
+}
+
+.treeSvg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.wishStar {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, .85)) drop-shadow(0 0 55px rgba(120, 200, 255, .35));
+}
+
+.wishStarCore {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 1), rgba(160, 210, 255, .35));
+    clip-path: polygon(50% 0%,
+            61% 35%,
+            98% 35%,
+            68% 57%,
+            79% 91%,
+            50% 70%,
+            21% 91%,
+            32% 57%,
+            2% 35%,
+            39% 35%);
+    animation: twinkle 1.8s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        transform: scale(0.95);
+        opacity: .85;
+    }
+
+    50% {
+        transform: scale(1.12);
+        opacity: 1;
+    }
+}
+
+.flyLayer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 40;
+}
+
+.wishFly2 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    transform: translate(0px, 0px);
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, .85)) drop-shadow(0 0 70px rgba(120, 200, 255, .25));
+}
+
+.wishFlyCore2 {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 1), rgba(160, 210, 255, .25));
+    clip-path: polygon(50% 0%,
+            61% 35%,
+            98% 35%,
+            68% 57%,
+            79% 91%,
+            50% 70%,
+            21% 91%,
+            32% 57%,
+            2% 35%,
+            39% 35%);
+}
+
+.wishFlyTail2 {
+    position: absolute;
+    left: -110px;
+    top: 7px;
+    width: 120px;
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, .75),
+            rgba(120, 200, 255, .0));
+    filter: blur(0.4px);
+    opacity: .95;
+}
+
+.wishUI {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    z-index: 60;
+    pointer-events: auto;
+    width: min(460px, calc(100% - 28px));
+}
+
+.wishCard {
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 18px;
+    padding: 12px 12px 10px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, .35);
+}
+
+.wishRow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.wishLabel {
+    font-size: 12px;
+    color: rgba(255, 255, 255, .72);
+}
+
+.wishInput,
+.wishText {
+    width: 100%;
+    border: none;
+    outline: none;
+    color: var(--text);
+    background: rgba(0, 0, 0, .18);
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.wishText {
+    resize: none;
+}
+
+.wishActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.send {
+    border: none;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .16);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, .18);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .28);
+}
+
+.send:hover {
+    background: rgba(255, 255, 255, .20);
+}
+
+.hint {
+    font-size: 12px;
+    color: rgba(255, 255, 255, .68);
+}
+
+/* Tree visuals */
+.treeBaseShadow {
+    fill: rgba(0, 0, 0, .25);
+    filter: blur(2px);
+}
+
+.treeSnow {
+    fill: rgba(255, 255, 255, .08);
+    stroke: rgba(255, 255, 255, .10);
+    stroke-width: 1;
+    filter: drop-shadow(0 18px 45px rgba(0, 0, 0, .20));
+}
+
+.treeStroke {
+    stroke: rgba(255, 255, 255, .22);
+    stroke-width: 4.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    filter: drop-shadow(0 8px 22px rgba(0, 0, 0, .20));
+}
+
+.garlandLine {
+    fill: none;
+    stroke: rgba(255, 255, 255, .14);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 4 7;
+    opacity: .85;
+}
+
+.treeBulb .tree-light {
+    fill: hsl(var(--h, 45) 92% 70%);
+    filter: drop-shadow(0 0 16px hsl(var(--h, 45) 92% 70% / .55));
+}
+
+.treeBulb .bulbHi {
+    fill: rgba(255, 255, 255, .75);
+    opacity: .65;
+}
+
+.star {
+    fill: rgba(255, 235, 165, .98);
+    filter: drop-shadow(0 0 22px rgba(255, 235, 165, .45));
+}
+
+.trunk {
+    fill: rgba(150, 90, 50, .88);
+    stroke: rgba(255, 255, 255, .10);
+    stroke-width: 1;
+}
+
+.treeGifts .giftA {
+    fill: rgba(255, 90, 160, .60);
+    stroke: rgba(255, 255, 255, .16);
+    stroke-width: 1;
+}
+
+.treeGifts .giftB {
+    fill: rgba(90, 200, 255, .60);
+    stroke: rgba(255, 255, 255, .16);
+    stroke-width: 1;
+}
+
+.treeGifts .giftC {
+    fill: rgba(120, 255, 170, .55);
+    stroke: rgba(255, 255, 255, .16);
+    stroke-width: 1;
+}
+
+.treeGifts .giftRibbon,
+.treeGifts .giftRibbon2,
+.treeGifts .giftRibbon3 {
+    fill: rgba(255, 255, 255, .18);
+}
+
+.treeGifts .giftBow,
+.treeGifts .giftBow2,
+.treeGifts .giftBow3 {
+    fill: rgba(255, 255, 255, .22);
+}
+
+/* ✅ INTRO (REGALO + OVERLAY) */
+.introOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 120;
+    display: grid;
+    place-items: center;
+    pointer-events: auto;
+    background:
+        radial-gradient(800px 500px at 30% 25%, rgba(255, 255, 255, .08), rgba(0, 0, 0, 0)),
+        radial-gradient(600px 420px at 65% 40%, rgba(120, 200, 255, .10), rgba(0, 0, 0, 0)),
+        linear-gradient(180deg, rgba(0, 0, 0, .35), rgba(0, 0, 0, .55));
+    backdrop-filter: blur(10px);
+}
+
+.introCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 18px 14px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .12);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .55);
+}
+
+.introText {
+    font-size: 13px;
+    color: rgba(255, 255, 255, .85);
+}
+
+.introGift {
+    width: 220px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 22px 65px rgba(0, 0, 0, .55));
+}
+
+.giftLid,
+.giftBase,
+.giftBow {
+    transform-box: fill-box;
+    transform-origin: 50% 80%;
+}
+
+.introTip {
+    font-size: 12px;
+    color: rgba(255, 255, 255, .65);
+}
+
+/* ✅ MODAL (MENSAJE) */
+.modalOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 130;
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(12px);
+    display: grid;
+    place-items: center;
+    padding: 16px;
+}
+
+.modalCard {
+    width: min(520px, 100%);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .14);
+    box-shadow: 0 26px 90px rgba(0, 0, 0, .6);
+    overflow: hidden;
+}
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, .06);
+    border-bottom: 1px solid rgba(255, 255, 255, .10);
+}
+
+.modalTitle {
+    font-weight: 760;
+    letter-spacing: .2px;
+}
+
+.modalClose {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .06);
+    color: rgba(255, 255, 255, .90);
+    border-radius: 12px;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.modalClose:hover {
+    background: rgba(255, 255, 255, .10);
+}
+
+.modalMeta {
+    padding: 12px 14px 0;
+    color: rgba(255, 255, 255, .82);
+    font-size: 13px;
+}
+
+.metaRow {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+
+.metaLabel {
+    color: rgba(255, 255, 255, .65);
+    min-width: 34px;
+}
+
+.metaValue {
+    color: rgba(255, 255, 255, .90);
+    font-weight: 650;
+}
+
+.modalBody {
+    padding: 10px 14px 14px;
+}
+
+.modalMessage {
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    background: rgba(0, 0, 0, .18);
+    color: rgba(255, 255, 255, .92);
+    line-height: 1.35;
+    white-space: pre-wrap;
+}
+
+.modalFooter {
+    padding: 10px 14px 14px;
+    color: rgba(255, 255, 255, .65);
+    font-size: 12px;
+}
+
+/* ✅ Responsive (TABLET) */
+@media (max-width: 980px) {
+    .scene {
+        height: auto;
+        min-height: 720px;
+    }
+
+    .sceneGrid {
+        position: relative;
+        inset: auto;
+        grid-template-columns: 1fr;
+        grid-template-rows: 480px auto;
+    }
+
+    .treeArea {
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, .08);
+        padding: 10px 10px 16px;
+    }
+
+    .wishUI {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: auto;
+    }
+
+    /* ✅ Menos nieve en tablet */
+    .snowCanvas {
+        opacity: .68;
+    }
+
+    /* ⭐ tap-friendly en tablet (sin cambiar desktop) */
+    .wishStar {
+        width: 22px;
+        height: 22px;
+    }
+
+    .wishStar::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 44px;
+        height: 44px;
+        transform: translate(-50%, -50%);
+        border-radius: 999px;
+        background: transparent;
+    }
+}
+
+/* ✅ Responsive (MÓVIL) */
+@media (max-width: 560px) {
+    .hud {
+        padding: 12px 12px 8px;
+    }
+
+    .badge {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .titles .title {
+        font-size: 16px;
+    }
+
+    .titles .subtitle {
+        font-size: 11px;
+    }
+
+    .pill {
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+
+    /* ✅ Menos nieve en móvil */
+    .snowCanvas {
+        opacity: .52;
+    }
+
+    /* ⭐ estrellas un poquito más grandes */
+    .wishStar {
+        width: 24px;
+        height: 24px;
+    }
+
+    .wishStar::before {
+        width: 52px;
+        height: 52px;
+    }
+
+    /* ✅ Reset altura cielo en móvil (vs tablet) */
+    .skyArea {
+        min-height: 350px;
+    }
+
+    .sceneGrid {
+        grid-template-rows: 350px auto;
+    }
+
+    /* ✅ la hint arriba para no tapar estrellas */
+    .skyHint {
+        left: 12px;
+        right: 12px;
+        bottom: auto;
+        top: 12px;
+        text-align: center;
+    }
+
+    .wishUI {
+        left: 12px;
+        right: 12px;
+        bottom: auto;
+        top: 500px;
+        /* Debajo del cielo */
+        width: auto;
+    }
+}
+
+/* ✅ Luna: scale uniforme por breakpoint (no deforma) */
+.skyArea {
+    --moonScale: 1;
+}
+
+@media (max-width: 980px) {
+    .skyArea {
+        --moonScale: .90;
+    }
+}
+
+@media (max-width: 520px) {
+    .skyArea {
+        --moonScale: .82;
+    }
+}
+
+/* ✅ Aplica scale uniforme al grupo de la luna dentro del SVG */
+.moonGroup {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(var(--moonScale));
+}
