@@ -84,7 +84,7 @@ export default function WelcomeAuth() {
                             <input
                                 id="username"
                                 className="wishInput"
-                                placeholder="Ej. emmanuel"
+                                placeholder="Ej. Eduardo"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 maxLength={20}
