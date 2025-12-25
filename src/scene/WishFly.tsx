@@ -13,7 +13,7 @@ function bezier(p0: Point, p1: Point, p2: Point, p3: Point, t: number) {
     const x = uuu * p0.x + 3 * uu * t * p1.x + 3 * u * tt * p2.x + ttt * p3.x;
     const y = uuu * p0.y + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y;
 
-    // derivada para ángulo
+
     const dx =
         3 * uu * (p1.x - p0.x) +
         6 * u * t * (p2.x - p1.x) +
@@ -52,7 +52,7 @@ export default function WishFly({
             return;
         }
 
-        // Control points (arco bonito)
+
         const dx = end.x - start.x;
 
         const cp1: Point = {

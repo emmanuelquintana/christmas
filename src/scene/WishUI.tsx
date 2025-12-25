@@ -13,7 +13,7 @@ export default function WishUI() {
 
         const rect = btnRef.current?.getBoundingClientRect() ?? null;
 
-        // micro feedback
+
         if (btnRef.current) {
             gsap.fromTo(btnRef.current, { scale: 1 }, { scale: 0.94, duration: 0.08, yoyo: true, repeat: 1, ease: "power2.out" });
         }

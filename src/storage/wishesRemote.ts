@@ -1,12 +1,12 @@
 import { supabase } from "../lib/supabaseClient";
 
 export type Wish = {
-    id: string; // uuid
+    id: string;
     name: string;
     message: string;
     x: number;
     y: number;
-    createdAt: number; // epoch ms
+    createdAt: number;
 };
 
 type Row = {
@@ -15,7 +15,7 @@ type Row = {
     message: string;
     x: number;
     y: number;
-    created_at: string; // ISO
+    created_at: string;
 };
 
 const TABLE = "wishes";
@@ -41,9 +41,6 @@ export async function fetchWishes(username: string, limit = MAX): Promise<Wish[]
     }));
 }
 
-/**
- * Insert con id definido por el cliente
- */
 export async function insertWish(input: { id: string; name: string; message: string; x: number; y: number; username: string }) {
     const { error } = await supabase.from(TABLE).insert({
         id: input.id,
@@ -54,7 +51,7 @@ export async function insertWish(input: { id: string; name: string; message: str
         username: input.username,
     });
 
-    // Si ya existe (por reintentos), no rompemos
+
     if (error && !String(error.message || "").toLowerCase().includes("duplicate")) {
         throw error;
     }

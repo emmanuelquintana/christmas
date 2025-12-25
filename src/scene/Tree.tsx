@@ -28,7 +28,7 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
             });
         };
 
-        // MENOS luces (se veía saturado)
+
         setLights([
             ...sample(pTop, 10, 0),
             ...sample(pMid, 12, 40),
@@ -144,7 +144,7 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
                     </radialGradient>
                 </defs>
 
-                {/* Base */}
+
                 <ellipse data-fade className="treeBaseShadow" cx="260" cy="650" rx="170" ry="42" />
                 <path
                     data-fade
@@ -156,13 +156,13 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
              C210 678, 160 670, 120 648 Z"
                 />
 
-                {/* Garlands (invisibles) */}
+
                 <path id="garlandTop" d="M180 225 C215 260, 305 260, 340 225" fill="none" />
                 <path id="garlandMid" d="M155 350 C210 395, 310 395, 365 350" fill="none" />
                 <path id="garlandLow" d="M130 490 C200 545, 320 545, 390 490" fill="none" />
 
                 <g className="treeBody">
-                    {/* Silueta general (1 sola, más limpia) */}
+
                     <path
                         data-draw
                         className="treeStroke"
@@ -233,7 +233,7 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
                         opacity="0.40"
                     />
 
-                    {/* Tronco */}
+
                     <path
                         data-fade
                         className="trunk"
@@ -243,12 +243,12 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
                C292 605, 287 575, 285 535 Z"
                     />
 
-                    {/* Guirnalda visible */}
+
                     <path data-fade className="garlandLine" d="M180 225 C215 260, 305 260, 340 225" />
                     <path data-fade className="garlandLine" d="M155 350 C210 395, 310 395, 365 350" />
                     <path data-fade className="garlandLine" d="M130 490 C200 545, 320 545, 390 490" />
 
-                    {/* Ornaments */}
+
                     <g data-fade className="ornaments">
                         <circle cx="240" cy="260" r="8" className="orn" fill="rgba(255,255,255,.20)" />
                         <circle cx="290" cy="285" r="7" className="orn" fill="rgba(255,255,255,.16)" />
@@ -258,7 +258,7 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
                         <circle cx="305" cy="468" r="9" className="orn" fill="rgba(255,255,255,.20)" />
                     </g>
 
-                    {/* Luces */}
+
                     <g data-fade className="lights">
                         {lights.map((p, i) => (
                             <g key={i} className="treeBulb" style={{ ["--h" as any]: p.hue }}>
@@ -268,7 +268,7 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
                         ))}
                     </g>
 
-                    {/* Regalos */}
+
                     <g data-fade className="treeGifts">
                         <g className="treeGift">
                             <rect x="125" y="607" width="84" height="56" rx="14" className="giftA" />
@@ -293,7 +293,7 @@ export default function Tree({ reducedMotion }: { reducedMotion: boolean }) {
                     </g>
                 </g>
 
-                {/* Estrella */}
+
                 <g data-fade className="treeTopStar">
                     <circle cx="260" cy="102" r="44" fill="url(#starGlow)" opacity="0.6" />
                     <path

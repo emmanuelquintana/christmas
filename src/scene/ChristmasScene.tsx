@@ -53,7 +53,6 @@ function uuidv4() {
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
-// zona segura para que no se corten estrellas en móvil/tablet
 const SAFE = {
     xMin: 0.06,
     xMax: 0.94,
@@ -61,17 +60,14 @@ const SAFE = {
     yMax: 0.78,
 };
 
-// normaliza wishes antiguos (si venían en px) -> % usando el sky actual
 function normalizeWishesToPct(rows: Wish[], skyRect: DOMRect | null) {
     if (!skyRect || skyRect.width <= 0 || skyRect.height <= 0) return { rows, changed: false };
 
     let changed = false;
     const next = rows.map((w) => {
-        // Si ya están como % (0..1), los dejamos
         const looksPct = w.x >= 0 && w.x <= 1 && w.y >= 0 && w.y <= 1;
         if (looksPct) return w;
 
-        // Si venían como px, convertimos (aprox) a porcentaje y clamp
         const xPct = clamp(w.x / skyRect.width, SAFE.xMin, SAFE.xMax);
         const yPct = clamp(w.y / skyRect.height, SAFE.yMin, SAFE.yMax);
 
@@ -93,7 +89,6 @@ export default function ChristmasScene({ username }: { username: string }) {
     const [wishes, setWishes] = useState<Wish[]>([]);
     const [selected, setSelected] = useState<Wish | null>(null);
 
-    // 1) Cargar + suscribir
     useEffect(() => {
         let alive = true;
 
@@ -117,7 +112,6 @@ export default function ChristmasScene({ username }: { username: string }) {
         };
     }, [username]);
 
-    // ✅ 1.1) Normalizar coords a % cuando ya exista skyRef (evita “faltan estrellas”)
     useLayoutEffect(() => {
         const sky = skyRef.current;
         if (!sky) return;
@@ -125,10 +119,8 @@ export default function ChristmasScene({ username }: { username: string }) {
         const skyRect = sky.getBoundingClientRect();
         const { rows, changed } = normalizeWishesToPct(wishes, skyRect);
         if (changed) setWishes(rows);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [wishes.length]); // solo cuando cambie el tamaño de la lista
+    }, [wishes.length]);
 
-    // Parallax suave
     useEffect(() => {
         const scene = sceneRef.current;
         if (!scene || reduced) return;
@@ -154,7 +146,6 @@ export default function ChristmasScene({ username }: { username: string }) {
         };
     }, [reduced]);
 
-    // Reveal anim
     useLayoutEffect(() => {
         const el = sceneRef.current;
         if (!el || reduced || !introDone) return;
@@ -173,7 +164,6 @@ export default function ChristmasScene({ username }: { username: string }) {
         return () => ctx.revert();
     }, [reduced, introDone]);
 
-    // ✅ Wish send -> vuelo en px, destino guardado en %
     useEffect(() => {
         const handler = (ev: Event) => {
             const detail = (ev as CustomEvent).detail as {
@@ -193,16 +183,13 @@ export default function ChristmasScene({ username }: { username: string }) {
             const sRect = scene.getBoundingClientRect();
             const skyRect = sky.getBoundingClientRect();
 
-            // start: desde el botón "Enviar"
             const from = detail.fromRect;
             const startX = from ? from.left + from.width / 2 - sRect.left : sRect.width * 0.22;
             const startY = from ? from.top + from.height / 2 - sRect.top : sRect.height * 0.86;
 
-            // ✅ end en % (zona segura)
             const endPctX = rand(SAFE.xMin, SAFE.xMax);
             const endPctY = rand(SAFE.yMin, SAFE.yMax);
 
-            // convertir % a px dentro del scene (offset del sky dentro del scene)
             const skyOffsetX = skyRect.left - sRect.left;
             const skyOffsetY = skyRect.top - sRect.top;
 
@@ -228,7 +215,6 @@ export default function ChristmasScene({ username }: { username: string }) {
         return () => window.removeEventListener("wish:send", handler as EventListener);
     }, []);
 
-    // cuando termina el vuelo -> se crea estrella + se guarda en Supabase
     const onFlyDone = (id: string) => {
         setFlying((prev) => {
             const found = prev.find((f) => f.id === id);
@@ -239,19 +225,16 @@ export default function ChristmasScene({ username }: { username: string }) {
                     id: found.id,
                     name: found.name,
                     message: found.message,
-                    // ✅ guardamos como % (0..1)
                     x: found.endPct.x,
                     y: found.endPct.y,
                     createdAt: Date.now(),
                 };
 
-                // mostrar inmediato
                 setWishes((w) => {
                     if (w.some((p) => p.id === star.id)) return w;
                     return [...w, star].slice(-200);
                 });
 
-                // ✅ guardar global en Supabase
                 insertWish({
                     id: star.id,
                     name: star.name,
@@ -266,7 +249,6 @@ export default function ChristmasScene({ username }: { username: string }) {
         });
     };
 
-    // Encender todo
     useEffect(() => {
         if (reduced) return;
 
@@ -327,7 +309,6 @@ export default function ChristmasScene({ username }: { username: string }) {
             {!introDone && <IntroGift reducedMotion={reduced} onDone={() => setIntroDone(true)} />}
 
             <div className="sceneGrid">
-                {/* Cielo */}
                 <div ref={skyRef} className="skyArea">
                     <StarfieldCanvas mode="night" reducedMotion={reduced} />
                     <SkyDecor reducedMotion={reduced} />
@@ -357,7 +338,6 @@ export default function ChristmasScene({ username }: { username: string }) {
                     <div className="skyHint">✨ Haz click en las estrellas para ver los mensajes.</div>
                 </div>
 
-                {/* Árbol */}
                 <div className="treeArea">
                     <Tree reducedMotion={reduced} />
                 </div>
@@ -376,7 +356,6 @@ export default function ChristmasScene({ username }: { username: string }) {
                 ))}
             </div>
 
-            {/* UI overlay */}
             <WishUI />
 
             {selected && <WishModal wish={selected} onClose={() => setSelected(null)} />}

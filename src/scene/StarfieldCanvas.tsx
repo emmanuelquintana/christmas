@@ -50,12 +50,10 @@ export default function StarfieldCanvas({
             let sizeFactor = 1.0;
 
             if (w < 768) {
-                // Móvil
                 factor = 0.5;
                 base = 30;
-                sizeFactor = 0.6; // Estrellas más pequeñas en móvil
+                sizeFactor = 0.6;
             } else if (w < 1024) {
-                // Tablet
                 factor = 0.7;
                 base = 50;
             }
@@ -76,7 +74,8 @@ export default function StarfieldCanvas({
         const drawStatic = () => {
             ctx.clearRect(0, 0, w, h);
 
-            // base haze
+            ctx.clearRect(0, 0, w, h);
+
             const g = ctx.createRadialGradient(w * 0.25, h * 0.15, 0, w * 0.25, h * 0.15, Math.max(w, h));
             if (mode === "party") {
                 g.addColorStop(0, "rgba(160,120,255,.10)");
@@ -88,7 +87,8 @@ export default function StarfieldCanvas({
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, w, h);
 
-            // stars
+            ctx.fillRect(0, 0, w, h);
+
             for (const s of stars) {
                 ctx.fillStyle = `rgba(255,255,255,${s.a})`;
                 ctx.beginPath();
@@ -100,11 +100,13 @@ export default function StarfieldCanvas({
         const loop = () => {
             if (reducedMotion) return;
 
-            // very light twinkle without redrawing everything heavy:
+            if (reducedMotion) return;
+
             ctx.clearRect(0, 0, w, h);
             drawStatic();
 
-            // micro twinkle overlay
+            drawStatic();
+
             for (const s of stars) {
                 s.tw += s.s * (mode === "party" ? 1.6 : 1.0);
                 const pulse = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(s.tw));

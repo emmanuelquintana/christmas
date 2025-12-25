@@ -60,7 +60,6 @@ export default function WelcomeAuth() {
 
     return (
         <div className="scene" style={{ position: "fixed", inset: 0, zIndex: 9999, height: "100%" }}>
-            {/* Background Decor */}
             <div className="skyArea" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)" }}>
                 <StarfieldCanvas mode="night" reducedMotion={reduced} />
                 <SkyDecor reducedMotion={reduced} />

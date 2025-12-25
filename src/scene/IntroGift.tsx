@@ -25,7 +25,7 @@ export default function IntroGift({
             return;
         }
 
-        // Reduced motion: solo muestra un instante y termina
+
         if (reducedMotion) {
             const t = setTimeout(onDone, 450);
             return () => clearTimeout(t);
@@ -56,7 +56,7 @@ export default function IntroGift({
             .to(lid, { rotation: -28, y: -18, duration: 0.35, ease: "power2.out" }, 0.78)
             .to(txt, { opacity: 0, y: -4, duration: 0.18, ease: "power2.in" }, 1.05);
 
-        // click para saltar
+
         const onSkip = () => {
             tl.kill();
             gsap.to(root, { opacity: 0, duration: 0.16, ease: "power2.inOut", onComplete: onDone });
