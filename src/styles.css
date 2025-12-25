@@ -94,7 +94,7 @@ body {
     min-height: 0;
     overflow: auto;
     overflow-x: hidden;
-    /* ✅ evita scroll horizontal en responsive */
+    overflow-x: hidden;
     padding: 0 18px 18px;
 }
 
@@ -128,7 +128,6 @@ body {
         linear-gradient(180deg, rgba(0, 0, 0, .10), rgba(0, 0, 0, .18));
 }
 
-/* ✅ CAPAS SEGURAS (NO cambian el look, solo el orden) */
 .starCanvas {
     position: absolute;
     inset: 0;
@@ -169,7 +168,7 @@ body {
     inset: 0;
     pointer-events: auto;
     z-index: 4;
-    /* ⭐ arriba de nieve/decor */
+    z-index: 4;
 }
 
 .skyHint {
@@ -384,7 +383,6 @@ body {
     color: rgba(255, 255, 255, .68);
 }
 
-/* Tree visuals */
 .treeBaseShadow {
     fill: rgba(0, 0, 0, .25);
     filter: blur(2px);
@@ -465,7 +463,6 @@ body {
     fill: rgba(255, 255, 255, .22);
 }
 
-/* ✅ INTRO (REGALO + OVERLAY) */
 .introOverlay {
     position: absolute;
     inset: 0;
@@ -516,7 +513,6 @@ body {
     color: rgba(255, 255, 255, .65);
 }
 
-/* ✅ MODAL (MENSAJE) */
 .modalOverlay {
     position: absolute;
     inset: 0;
@@ -608,7 +604,6 @@ body {
     font-size: 12px;
 }
 
-/* ✅ Responsive (TABLET) */
 @media (max-width: 980px) {
     .scene {
         height: auto;
@@ -635,12 +630,10 @@ body {
         width: auto;
     }
 
-    /* ✅ Menos nieve en tablet */
     .snowCanvas {
         opacity: .68;
     }
 
-    /* ⭐ tap-friendly en tablet (sin cambiar desktop) */
     .wishStar {
         width: 22px;
         height: 22px;
@@ -659,7 +652,6 @@ body {
     }
 }
 
-/* ✅ Responsive (MÓVIL) */
 @media (max-width: 560px) {
     .hud {
         padding: 12px 12px 8px;
@@ -686,12 +678,10 @@ body {
         font-size: 13px;
     }
 
-    /* ✅ Menos nieve en móvil */
     .snowCanvas {
         opacity: .52;
     }
 
-    /* ⭐ estrellas un poquito más grandes */
     .wishStar {
         width: 24px;
         height: 24px;
@@ -702,7 +692,6 @@ body {
         height: 52px;
     }
 
-    /* ✅ Reset altura cielo en móvil (vs tablet) */
     .skyArea {
         min-height: 350px;
     }
@@ -711,7 +700,6 @@ body {
         grid-template-rows: 350px auto;
     }
 
-    /* ✅ la hint arriba para no tapar estrellas */
     .skyHint {
         left: 12px;
         right: 12px;
@@ -720,7 +708,6 @@ body {
         text-align: center;
     }
 
-    /* ✅ Header ajustes en móvil */
     .controls {
         gap: 6px;
     }
@@ -729,10 +716,8 @@ body {
         padding: 6px 8px;
         font-size: 12px;
         white-space: nowrap;
-        /* Evita que el texto se envuelva */
     }
 
-    /* Mostrar texto corto en móvil */
     .desktop-text {
         display: none;
     }
@@ -741,19 +726,16 @@ body {
         display: inline;
     }
 
-    /* Ocultar subtítulo para ahorrar espacio */
     .brand .subtitle {
         display: none;
     }
 
-    /* Ocultar botón Encender en móvil */
     .btn-encender {
         display: none;
     }
 
     .brand .title {
         font-size: 15px;
-        /* Reducir título */
     }
 
     .wishUI {
@@ -761,12 +743,10 @@ body {
         right: 12px;
         bottom: auto;
         top: 459px;
-        /* Debajo del cielo */
         width: auto;
     }
 }
 
-/* ✅ Luna: scale uniforme por breakpoint (no deforma) */
 .skyArea {
     --moonScale: 1;
 }
@@ -783,7 +763,6 @@ body {
     }
 }
 
-/* ✅ Aplica scale uniforme al grupo de la luna dentro del SVG */
 .moonGroup {
     transform-box: fill-box;
     transform-origin: center;
