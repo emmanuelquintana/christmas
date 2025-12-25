@@ -19,7 +19,6 @@ export default function WelcomeAuth() {
         setLoading(true);
 
         try {
-            // 1. Check if user exists
             const { count, error: countErr } = await supabase
                 .from("users")
                 .select("*", { count: "exact", head: true })
@@ -28,7 +27,6 @@ export default function WelcomeAuth() {
             if (countErr) throw countErr;
 
             if (mode === "register") {
-                // REGISTER MODE
                 if (count && count > 0) {
                     alert("Este nombre ya tiene dueño. ¡Intenta otro! 🎄");
                     setLoading(false);
@@ -41,7 +39,6 @@ export default function WelcomeAuth() {
 
                 if (error) throw error;
             } else {
-                // LOGIN MODE
                 if (!count || count === 0) {
                     alert("No encontramos ese espacio. ¿Seguro que lo escribiste bien?");
                     setLoading(false);
@@ -49,7 +46,6 @@ export default function WelcomeAuth() {
                 }
             }
 
-            // Redirect to user's world
             window.location.href = `/?u=${user}`;
         } catch (err) {
             console.error(err);
