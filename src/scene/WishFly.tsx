@@ -51,7 +51,6 @@ export default function WishFly({
             onDone(id);
             return;
         }
-
         const dx = end.x - start.x;
 
         const cp1: Point = {
