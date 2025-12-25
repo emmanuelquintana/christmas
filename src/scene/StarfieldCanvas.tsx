@@ -47,11 +47,13 @@ export default function StarfieldCanvas({
 
             let factor = 1.0;
             let base = 70;
+            let sizeFactor = 1.0;
 
             if (w < 768) {
                 // Móvil
                 factor = 0.5;
                 base = 30;
+                sizeFactor = 0.6; // Estrellas más pequeñas en móvil
             } else if (w < 1024) {
                 // Tablet
                 factor = 0.7;
@@ -63,7 +65,7 @@ export default function StarfieldCanvas({
                 stars.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    r: 0.5 + Math.random() * 1.2,
+                    r: (0.5 + Math.random() * 1.2) * sizeFactor,
                     a: 0.25 + Math.random() * 0.75,
                     tw: Math.random() * Math.PI * 2,
                     s: 0.006 + Math.random() * 0.012,

@@ -59,13 +59,11 @@ export default function WelcomeAuth() {
 
     return (
         <div className="scene" style={{ position: "fixed", inset: 0, zIndex: 9999, height: "100%" }}>
-            {/* Background Decor (Only for Login) */}
-            {mode === "login" && (
-                <div className="skyArea" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)" }}>
-                    <StarfieldCanvas mode="party" reducedMotion={reduced} />
-                    <SnowCanvas mode="night" reducedMotion={reduced} />
-                </div>
-            )}
+            {/* Background Decor */}
+            <div className="skyArea" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)" }}>
+                <StarfieldCanvas mode="night" reducedMotion={reduced} />
+                <SnowCanvas mode="night" reducedMotion={reduced} />
+            </div>
 
             <div className="modalOverlay" style={{ zIndex: 200, background: "transparent" }}>
                 <div className="introCenter" style={{ width: "min(360px, 90%)", gap: 20, background: "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(20px)" }}>
